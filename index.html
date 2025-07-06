@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Magic Mushroom Spore Shop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .hidden { display: none; }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <header class="bg-white shadow p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">🍄 Magic Mushroom Spore</h1>
+    </div>
+  </header>
+
+  <main class="container mx-auto p-6">
+    <section class="text-center py-10">
+      <h2 class="text-4xl font-bold mb-4">Premium Magic Mushroom Spores</h2>
+      <p class="text-lg">Crypto payments only. Fast & discreet shipping worldwide.</p>
+    </section>
+
+    <section id="products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white rounded-2xl shadow p-4">
+        <h3 class="text-xl font-semibold">Golden Teacher Spore Print</h3>
+        <p class="font-bold mb-2">20€</p>
+        <button onclick="addToCart('Golden Teacher Spore Print', 20)" class="bg-blue-500 text-white px-4 py-2 rounded">Add to Cart</button>
+      </div>
+      <div class="bg-white rounded-2xl shadow p-4">
+        <h3 class="text-xl font-semibold">Golden Teacher Spore Liquid</h3>
+        <p class="font-bold mb-2">25€</p>
+        <button onclick="addToCart('Golden Teacher Spore Liquid', 25)" class="bg-blue-500 text-white px-4 py-2 rounded">Add to Cart</button>
+      </div>
+      <div class="bg-white rounded-2xl shadow p-4">
+        <h3 class="text-xl font-semibold">High Spore Print</h3>
+        <p class="font-bold mb-2">20€</p>
+        <button onclick="addToCart('High Spore Print', 20)" class="bg-blue-500 text-white px-4 py-2 rounded">Add to Cart</button>
+      </div>
+      <div class="bg-white rounded-2xl shadow p-4">
+        <h3 class="text-xl font-semibold">High Spore Liquid</h3>
+        <p class="font-bold mb-2">20€</p>
+        <button onclick="addToCart('High Spore Liquid', 20)" class="bg-blue-500 text-white px-4 py-2 rounded">Add to Cart</button>
+      </div>
+      <div class="bg-white rounded-2xl shadow p-4">
+        <h3 class="text-xl font-semibold">Golden Teacher w/ Grain</h3>
+        <p class="font-bold mb-2">48€</p>
+        <button onclick="addToCart('Golden Teacher w/ Grain', 48)" class="bg-blue-500 text-white px-4 py-2 rounded">Add to Cart</button>
+      </div>
+      <div class="bg-white rounded-2xl shadow p-4">
+        <h3 class="text-xl font-semibold">High Spore w/ Grain</h3>
+        <p class="font-bold mb-2">48€</p>
+        <button onclick="addToCart('High Spore w/ Grain', 48)" class="bg-blue-500 text-white px-4 py-2 rounded">Add to Cart</button>
+      </div>
+    </section>
+
+    <section class="mt-12 bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-2xl font-bold mb-4">🛒 Cart</h2>
+      <ul id="cart" class="mb-4"></ul>
+      <p class="font-semibold">Shipping: 12€</p>
+      <p class="font-bold mb-4">Total: <span id="total">0€</span></p>
+
+      <form action="https://formsubmit.co/Mushroomspore20@gmail.com" method="POST" class="space-y-4">
+        <input type="hidden" name="_subject" value="New Spore Order">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" value="thanks.html">
+        <label class="block">
+          Name:
+          <input name="name" required class="w-full border p-2 rounded" />
+        </label>
+        <label class="block">
+          Email:
+          <input type="email" name="email" required class="w-full border p-2 rounded" />
+        </label>
+        <label class="block">
+          Address:
+          <textarea name="address" required class="w-full border p-2 rounded"></textarea>
+        </label>
+        <label class="block">
+          Ordered Items:
+          <textarea id="orderSummary" name="order" readonly class="w-full border p-2 rounded bg-gray-100"></textarea>
+        </label>
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Submit Order</button>
+      </form>
+    </section>
+
+    <section class="mt-12 p-6 bg-white rounded-2xl shadow">
+      <h2 class="text-xl font-bold mb-2">Payment Instructions</h2>
+      <p>After submitting your order, please send the full total amount to one of the following crypto wallet addresses:</p>
+      <ul class="mt-4 space-y-2">
+        <li><strong>USDT:</strong> 0xF948676E24195c0e45D9EFbE8D1a0E674ef0Cc9C</li>
+        <li><strong>Bitcoin:</strong> bc1q5fmlraj36xefdh2ge8pj6rfl3dsf9kwmpq34q8</li>
+        <li><strong>Litecoin:</strong> ltc1q4kp2wv6kq4dgn08lfh8039jvc6kfjcr0tk9ruk</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="bg-white p-4 text-center mt-10">
+    <p>&copy; 2025 Magic Mushroom Spore. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const cart = [];
+    const shipping = 12;
+
+    function addToCart(product, price) {
+      cart.push({ product, price });
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartList = document.getElementById('cart');
+      const orderSummary = document.getElementById('orderSummary');
+      cartList.innerHTML = '';
+      let total = shipping;
+      let summary = '';
+
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.product} – ${item.price}€`;
+        cartList.appendChild(li);
+        total += item.price;
+        summary += `${item.product} – ${item.price}€\n`;
+      });
+
+      summary += `Shipping – 12€\nTotal – ${total}€`;
+      document.getElementById('total').textContent = total + '€';
+      orderSummary.value = summary;
+    }
+  </script>
+</body>
+</html>
